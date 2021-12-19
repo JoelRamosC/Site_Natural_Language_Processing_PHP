@@ -1,0 +1,15 @@
+<?php 
+$host    = "localhost";
+$usuario = "id18095052_joelramos";
+$senha   = "Visconde$2015";
+$banco   = "id18095052_conversacao_14_bis";
+
+$ligar=mysqli_connect($host, $usuario,$senha,$banco);
+
+$ligar -> set_charset("utf8") ;
+
+if ($ligar -> connect_error){
+    echo "Erro de conexão";
+}
+
+?>
