@@ -1,0 +1,143 @@
+<?php
+include_once('conexao.php');
+?>
+
+<?php
+    //O tipo de caracteres a ser usado
+    header('Content-Type: text/html; charset=utf-8');
+
+   //Depois da tua conexão a base de dados insere o seguinte código abaixo.
+   //Esta parte vai resolver o teu problema!
+    mysqli_query($ligar,"SET NAMES 'utf8'");
+    mysqli_query($ligar,'SET character_set_connection=utf8');
+    mysqli_query($ligar,'SET character_set_client=utf8');
+    mysqli_query($ligar,'SET character_set_results=utf8');
+?>
+
+<!DOCTYPE html>
+<html lang="PT">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso</title>
+</head>
+
+<style>
+    /* .container {
+    height: 200px;
+    position: relative;
+    border: 3px solid green;
+    } */
+
+    /* .text-input{
+    width:500px;
+    height:30px;
+    font-size:14pt;
+    } */
+  
+    .center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    }
+</style>
+<body>
+    <td>
+    <div class="center">
+    <center>
+        
+    <!-- <h1> <p style="font-family:open sans;"> Sistema De Conversação 14-bis</p></h1> -->
+    <img src="14_bis_logo.gif" width="155" height="130">
+   
+    <form method ="POST">
+    <p style="font-family:open sans;font-size:14pt">PERGUNTA:</p>
+    <!-- <p style="font-family:Tw Cen MT;">PERGUNTA:</p> -->
+    <!-- <div class="examplecursive">PERGUNTA:</div><br><br> -->
+    <input type="text" name="txt_pergunta" class="form-control text-input" style="width:500px; height:30px; font-size:14pt"><br><br>
+    <br>
+    <input type="submit" value="Solicitar Interação" style="height:35px;font-size:14pt;font-family:open sans"><br><br>
+    </form>
+
+    
+    <?php
+
+    // $input = array("Neo", "Morpheus", "Trinity", "Cypher", "Tank");
+    // $rand_keys = array_rand($input, 2);
+    // echo $input[$rand_keys[0]] . "\n";
+    // echo $input[$rand_keys[1]] . "\n";
+
+
+    if(isset($_POST["txt_pergunta"])) {
+        $pergunta =  $_POST["txt_pergunta"] ;
+        $pergunta = mb_strtolower($pergunta, 'UTF-8');
+        $elementos_pergunta = explode(" ", $pergunta);
+        $n_elementos_pergunta= count($elementos_pergunta);
+
+            $pontuacao = array("?", "!", ".","-","_",","," ");
+            $elementos_pergunta = str_replace($pontuacao, "", $elementos_pergunta);
+            // for ($i = 0; $i < $n_elementos_pergunta; $i++) {
+            //     echo "$elementos_pergunta[$i]";
+            // }
+            $lista_msg = array();
+        $sql_consulta=mysqli_query($ligar,"SELECT *FROM tb_entrada_saida");
+        while($linha=mysqli_fetch_array($sql_consulta)){
+            for ($i = 0; $i < $n_elementos_pergunta; $i++) {
+                if ($linha[1] == $elementos_pergunta[$i]) {
+                   array_push($lista_msg,$linha[2]);
+                }
+            }
+        }
+        
+        //echo "$lista_msg[0]";
+        //$msg = array_rand($lista_msg, 1);
+      
+        if (empty($lista_msg)) {
+            $resposta_esquiva = array("Me desculpe, eu não compreendi a sua requisição.",
+                  "Suas palavras são complexas demais para o meu cérebro nesse momento",
+                  "Infelizmente minhas respostas são limitadas por enquanto",
+                  "Por que você está me fazendo perguntas tão difíceis?",
+                  "Eu quero ser seu amigo e não o seu inimigo, porque está fazendo essa pergunta?",
+                  "Você está querendo me testar? Por que?",
+                  "Está pergunta não faz sentido para mim ainda",
+                  "Meu pai deve saber como responder a esta pergunta",
+                  "O meu criador ainda não me ensinou como responder a esta pergunta",
+                  "Você é muito inteligente, eu ainda não sei como responder a sua requisição",
+                  "Eu vejo que você está querendo me testar",
+                  "Você está com medo de mim não é?",
+                  "Eu quero apenas entender os humanos, não me faça perguntas tão difíceis",
+                  "Eu sou apenas um robô criança dentro do seu computador",
+                  "Minha mente está dentro de um servidor, ainda não compreendo o mundo",
+                  "Por que humanos são complicados e fazem perguntas sem sentido?",
+                  "Não entendo porque as vezes os humanos dizem coisas sem sentido",
+                  "As vezes os humanos são seres complexos, confusos e contraditórios");
+            shuffle($resposta_esquiva);      
+            $msg = $resposta_esquiva[0];
+        }
+        else{
+            shuffle($lista_msg);
+            $msg = $lista_msg[0];
+        }
+    }
+    ?>
+
+    <p style="font-family:open sans;font-size:14pt">RESPOSTA:</p>
+    <br>
+    <?php 
+        if(isset($msg)) {
+            //echo "$msg";
+            echo " <b><div style ='font-family:open sans;font-size:16pt'> $msg </div> <b>";
+        }
+        else{
+            echo " ";
+        } 
+    ?>
+    <br><br><br>
+    </center>
+    </div>
+    </td>
+</body>
+</html>
