@@ -4,7 +4,7 @@ include_once('conexao.php');
 
 <?php
     //O tipo de caracteres a ser usado
-    header('Content-Type: text/html; charset=utf-8');
+    //header('Content-Type: text/html; charset=utf-8');
 
    //Depois da tua conexão a base de dados insere o seguinte código abaixo.
    //Esta parte vai resolver o teu problema!
@@ -77,24 +77,19 @@ include_once('conexao.php');
         $elementos_pergunta = explode(" ", $pergunta);
         $n_elementos_pergunta= count($elementos_pergunta);
 
-            $pontuacao = array("?", "!", ".","-","_",","," ");
-            $elementos_pergunta = str_replace($pontuacao, "", $elementos_pergunta);
-            // for ($i = 0; $i < $n_elementos_pergunta; $i++) {
-            //     echo "$elementos_pergunta[$i]";
-            // }
-            $lista_msg = array();
+        $pontuacao = array("?", "!", ".","-","_",","," ");
+        $elementos_pergunta = str_replace($pontuacao, "", $elementos_pergunta);
+        
+        $lista_msg = array();
         $sql_consulta=mysqli_query($ligar,"SELECT *FROM tb_entrada_saida");
         while($linha=mysqli_fetch_array($sql_consulta)){
             for ($i = 0; $i < $n_elementos_pergunta; $i++) {
                 if ($linha[1] == $elementos_pergunta[$i]) {
-                   array_push($lista_msg,$linha[2]);
+                    array_push($lista_msg,$linha[2]);
                 }
             }
         }
         
-        //echo "$lista_msg[0]";
-        //$msg = array_rand($lista_msg, 1);
-      
         if (empty($lista_msg)) {
             $resposta_esquiva = array("Me desculpe, eu não compreendi a sua requisição.",
                   "Suas palavras são complexas demais para o meu cérebro nesse momento",
