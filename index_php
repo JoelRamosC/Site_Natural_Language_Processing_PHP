@@ -65,12 +65,6 @@ include_once('conexao.php');
     
     <?php
 
-    // $input = array("Neo", "Morpheus", "Trinity", "Cypher", "Tank");
-    // $rand_keys = array_rand($input, 2);
-    // echo $input[$rand_keys[0]] . "\n";
-    // echo $input[$rand_keys[1]] . "\n";
-
-
     if(isset($_POST["txt_pergunta"])) {
         $pergunta =  $_POST["txt_pergunta"] ;
         $pergunta = mb_strtolower($pergunta, 'UTF-8');
